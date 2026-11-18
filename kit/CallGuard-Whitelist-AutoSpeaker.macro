@@ -1,0 +1,128 @@
+{
+  "exportVersion": "5.46",
+  "generator": "CallGuard-OPC-v1.0.0",
+  "targetBrand": "荣耀 Magic6 至尊版 / MagicOS 8.0–9.0",
+  "scene": "kitchen_driver",
+  "macros": [
+    {
+      "macroName": "01_CallGuard_亲情白名单自动免提接听",
+      "macroDescription": "当白名单号码 (13800138000, 13900139000) 来电时，等待 3 秒后自动接听、强制开启扬声器免提并将通话音量调至 90%。非白名单号码绝不自动接听。",
+      "isEnabled": true,
+      "category": "CallGuard免手接",
+      "triggers": [
+        {
+          "type": "CallIncomingTrigger",
+          "option": "SPECIFIED_NUMBERS",
+          "phoneNumbers": [
+            "13800138000",
+            "13900139000"
+          ],
+          "exactMatch": false
+        }
+      ],
+      "actions": [
+        {
+          "type": "WaitBeforeNextAction",
+          "delaySeconds": 3
+        },
+        {
+          "type": "AnswerCallAction",
+          "method": "TELECOM_OR_ACCESSIBILITY"
+        },
+        {
+          "type": "WaitBeforeNextAction",
+          "delaySeconds": 1
+        },
+        {
+          "type": "SpeakerPhoneAction",
+          "state": "ON"
+        },
+        {
+          "type": "SetVolumeAction",
+          "streams": {
+            "VOICE_CALL": 90,
+            "SPEAKER": 90
+          }
+        },
+        {
+          "type": "SpeakTextAction",
+          "text": "已为您免提接通白名单电话",
+          "queue": false
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "macroName": "02_CallGuard_微信亲情语音自动接听开免提",
+      "macroDescription": "当收到微信 (爸/妈/老婆/老公) 语音或视频通话邀请通知时，等待 3 秒自动点击「接听」并点亮「免提/扬声器」。",
+      "isEnabled": true,
+      "category": "CallGuard免手接",
+      "triggers": [
+        {
+          "type": "NotificationTrigger",
+          "packageName": "com.tencent.mm",
+          "textMatchType": "CONTAINS_REGEX",
+          "textPattern": "(爸|妈|老婆|老公).*(语音通话|视频通话|邀请你)"
+        }
+      ],
+      "actions": [
+        {
+          "type": "LaunchActivityFromNotificationAction"
+        },
+        {
+          "type": "WaitBeforeNextAction",
+          "delaySeconds": 3
+        },
+        {
+          "type": "UIInteractionAction",
+          "action": "CLICK",
+          "textMatches": [
+            "接听",
+            "Accept"
+          ]
+        },
+        {
+          "type": "WaitBeforeNextAction",
+          "delaySeconds": 2
+        },
+        {
+          "type": "UIInteractionAction",
+          "action": "CLICK",
+          "textMatches": [
+            "免提",
+            "扬声器",
+            "Speaker"
+          ]
+        }
+      ],
+      "constraints": []
+    },
+    {
+      "macroName": "03_CallGuard_通话中免触碰挂断兜底",
+      "macroDescription": "解决通话中麦克风被占用无法语音挂断死穴：通话进行中晃动手机（或手肘轻碰桌面震动），自动挂断电话。",
+      "isEnabled": true,
+      "category": "CallGuard免手接",
+      "triggers": [
+        {
+          "type": "ShakeDeviceTrigger",
+          "sensitivity": "MEDIUM"
+        }
+      ],
+      "actions": [
+        {
+          "type": "EndCallAction"
+        },
+        {
+          "type": "VibrateAction",
+          "pattern": "SHORT_DOUBLE"
+        }
+      ],
+      "constraints": [
+        {
+          "type": "CallStateConstraint",
+          "state": "IN_CALL"
+        }
+      ]
+    }
+  ]
+}

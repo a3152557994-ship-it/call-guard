@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TaskerData sr="" dvi="1" tv="6.2.22">
+  <!-- CallGuard (免手接) Tasker 自动免提与亲情白名单工程 -->
+  <Profile sr="prof101" ve="2">
+    <cdate>1763457600000</cdate>
+    <edate>1763457600000</edate>
+    <id>101</id>
+    <mid0>201</mid0>
+    <nme>CallGuard_白名单来电自动免提</nme>
+    <Event sr="con0" ve="2">
+      <code>7</code>
+      <pri>0</pri>
+      <Int sr="arg0" val="1"/>
+      <Str sr="arg1" ve="3">*13800138000*/*13900139000*</Str>
+    </Event>
+  </Profile>
+  <Profile sr="prof102" ve="2">
+    <cdate>1763457600000</cdate>
+    <edate>1763457600000</edate>
+    <id>102</id>
+    <mid0>202</mid0>
+    <nme>CallGuard_通话中免触挂断</nme>
+    <Event sr="con0" ve="2">
+      <code>3001</code>
+      <Int sr="arg0" val="0"/>
+      <Int sr="arg1" val="2"/>
+      <Int sr="arg2" val="1"/>
+    </Event>
+    <State sr="con1" ve="2">
+      <code>40</code>
+      <Int sr="arg0" val="2"/>
+      <Str sr="arg1" ve="3"/>
+    </State>
+  </Profile>
+  <Task sr="task201">
+    <cdate>1763457600000</cdate>
+    <edate>1763457600000</edate>
+    <id>201</id>
+    <nme>自动接听并开扬声器</nme>
+    <Action sr="act0" ve="7">
+      <code>30</code>
+      <Int sr="arg0" val="0"/>
+      <Int sr="arg1" val="3"/>
+      <Int sr="arg2" val="0"/>
+      <Int sr="arg3" val="0"/>
+      <Int sr="arg4" val="0"/>
+    </Action>
+    <Action sr="act1" ve="7">
+      <code>731</code>
+    </Action>
+    <Action sr="act2" ve="7">
+      <code>30</code>
+      <Int sr="arg0" val="0"/>
+      <Int sr="arg1" val="1"/>
+      <Int sr="arg2" val="0"/>
+      <Int sr="arg3" val="0"/>
+      <Int sr="arg4" val="0"/>
+    </Action>
+    <Action sr="act3" ve="7">
+      <code>254</code>
+      <Int sr="arg0" val="1"/>
+    </Action>
+    <Action sr="act4" ve="7">
+      <code>304</code>
+      <Int sr="arg0" val="14"/>
+      <Int sr="arg1" val="0"/>
+      <Int sr="arg2" val="0"/>
+    </Action>
+  </Task>
+  <Task sr="task202">
+    <cdate>1763457600000</cdate>
+    <edate>1763457600000</edate>
+    <id>202</id>
+    <nme>免触挂断当前通话</nme>
+    <Action sr="act0" ve="7">
+      <code>733</code>
+    </Action>
+  </Task>
+</TaskerData>

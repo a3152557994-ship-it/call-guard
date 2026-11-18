@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>免手接 CallGuard · 手机声控免提接听 & 亲情白名单防诈自动外放配置台</title>
+  <meta name="description" content="专治做饭满手油、开车、独居老人接不到电话：一键查荣耀Magic6/华为/小米/OV/iPhone隐藏声控接听开关，生成仅家人白名单自动免提接听、微信语音自动外放与通话摇晃挂断配置包。" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card: #111827;
+      --card-2: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --sky: #38bdf8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at top right, #1e293b 0%, #0b1120 55%);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 24px 16px 64px;
+    }
+    .container { max-width: 1040px; margin: 0 auto; }
+    .hero {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(56, 189, 248, 0.08));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 18px;
+      padding: 28px 24px;
+      margin-bottom: 22px;
+    }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.18);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .badge.amber {
+      background: rgba(245, 158, 11, 0.16);
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+    h1 { font-size: clamp(22px, 3.4vw, 32px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 15px; max-width: 820px; }
+    .grid-2 { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 18px; margin-bottom: 20px; }
+    @media (max-width: 840px) { .grid-2 { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .brand-tab {
+      background: var(--card-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .brand-tab.active {
+      background: var(--emerald);
+      color: #052e16;
+      border-color: var(--emerald);
+      font-weight: 800;
+    }
+    .step-box {
+      background: rgba(15, 23, 42, 0.85);
+      border-left: 4px solid var(--emerald);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+    }
+    .step-box.warn { border-left-color: var(--amber); }
+    .step-box.danger { border-left-color: var(--rose); }
+    .step-label { font-size: 12px; font-weight: 700; color: var(--emerald); text-transform: uppercase; margin-bottom: 4px; }
+    .step-box.warn .step-label { color: var(--amber); }
+    .step-box.danger .step-label { color: var(--rose); }
+    .path-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: rgba(56, 189, 248, 0.12);
+      color: #7dd3fc;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      display: block;
+      margin-top: 6px;
+      white-space: pre-wrap;
+    }
+    .score-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+    .score-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 24px;
+      background: rgba(244, 63, 94, 0.18);
+      color: #fda4af;
+      border: 2px solid var(--rose);
+      flex-shrink: 0;
+    }
+    .score-circle.safe {
+      background: rgba(16, 185, 129, 0.18);
+      color: #6ee7b7;
+      border-color: var(--emerald);
+    }
+    .check-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: rgba(30, 41, 59, 0.65);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      cursor: pointer;
+    }
+    .check-item input { margin-top: 4px; accent-color: var(--emerald); transform: scale(1.15); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-bottom: 16px; }
+    .field label { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; font-weight: 600; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-primary { background: var(--emerald); color: #052e16; }
+    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-amber { background: var(--amber); color: #451a03; }
+    .btn-outline { background: var(--card-2); color: var(--text); border-color: var(--border); }
+    .code-preview {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12.5px;
+      color: #a7f3d0;
+      max-height: 290px;
+      overflow: auto;
+      white-space: pre-wrap;
+      margin-top: 12px;
+    }
+    .pro-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin-top: 14px;
+    }
+    .pro-bar input {
+      flex: 1;
+      min-width: 220px;
+      background: #090d16;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .finding-item {
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .finding-item strong { color: #fda4af; display: block; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <div class="badge-row">
+        <span class="badge">荣耀 Magic6 至尊版实测适配</span>
+        <span class="badge">华为 / 小米 / OV / iPhone 全覆盖</span>
+        <span class="badge amber">独居长辈防漏接 & 厨房开车免手接听</span>
+      </div>
+      <h1>免手接 CallGuard · 手机声控免提 & 亲情白名单自动接听配置台</h1>
+      <p class="subtitle">
+        为什么对着手机喊“接听电话 / 挂断电话”没反应？因为 ① 系统隐藏开关默认关闭；② 通话一旦接通麦克风被独占，语音助手强制闭麦无法语音挂断；③ 系统自带「自动接听」不分人，外卖和诈骗电话也会 3 秒自动外放！本工具一站式解决这 3 个死穴。
+      </p>
+    </header>
+
+    <div class="grid-2">
+      <!-- 左侧：6 大品牌隐藏声控开关直查 -->
+      <section class="card" style="margin-bottom:0;">
+        <h2>
+          <span>1️⃣ 手机自带隐藏「动嘴接电话 + 自动免提」寻路卡</span>
+          <span class="badge" id="brandBadge">荣耀机主专配</span>
+        </h2>
+        <div class="brand-tabs" id="brandTabs">
+          <button class="brand-tab active" data-brand="honor">荣耀 Magic6 / MagicOS</button>
+          <button class="brand-tab" data-brand="huawei">华为鸿蒙 HarmonyOS</button>
+          <button class="brand-tab" data-brand="xiaomi">小米澎湃 HyperOS</button>
+          <button class="brand-tab" data-brand="oppo">OPPO ColorOS</button>
+          <button class="brand-tab" data-brand="vivo">vivo OriginOS</button>
+          <button class="brand-tab" data-brand="iphone">苹果 iPhone iOS 18</button>
+        </div>
+
+        <div class="step-box">
+          <div class="step-label">第一步：开启来电免唤醒声控接听（默认自动开免提）</div>
+          <div id="guidePath" class="path-code"></div>
+        </div>
+
+        <div class="step-box">
+          <div class="step-label">第二步：来电响铃时直接喊口令（无需唤醒词）</div>
+          <div id="guideCmdAnswer" style="font-size:14px; margin-top:4px;"></div>
+          <div id="guideCmdReject" style="font-size:13.5px; color:var(--muted); margin-top:4px;"></div>
+        </div>
+
+        <div class="step-box warn">
+          <div class="step-label">为什么通话接通后，喊“挂断电话”没反应？（官方底层限制与解法）</div>
+          <div id="guideHangupLimit" style="font-size:13.5px; margin-bottom:8px;"></div>
+          <ul id="guideHangupSolutions" style="padding-left:18px; font-size:13.5px; color:#fde68a;"></ul>
+        </div>
+      </section>
+
+      <!-- 右侧：10 秒防社死与漏接风险体检 -->
+      <section class="card" style="margin-bottom:0;">
+        <h2>
+          <span>2️⃣ 自动接听「防社死 / 防诈骗外放」10秒体检</span>
+        </h2>
+        <div class="score-banner">
+          <div class="score-circle" id="scoreCircle">20</div>
+          <div>
+            <div style="font-weight:800; font-size:15px;" id="scoreStatus">高危：存在外卖/诈骗电话自动外放与通话挂不断死穴</div>
+            <div style="font-size:12.5px; color:var(--muted); margin-top:2px;">勾选你目前已做好的防护项，实时重算安全分：</div>
+          </div>
+        </div>
+
+        <div class="check-list">
+          <label class="check-item">
+            <input type="checkbox" id="chkWhitelist" />
+            <span><strong>已启用「仅亲情白名单号码」自动免提过滤</strong>（拒绝系统一刀切自动接听外卖/推销/诈骗电话）</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="chkHangup" />
+            <span><strong>已配置通话中「免触屏挂断」兜底</strong>（开启电源键盲挂 或 摇晃/翻转手机自动挂断）</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="chkWechat" />
+            <span><strong>已打通「微信亲情语音/视频」自动免提接听</strong>（解决系统声控只管 SIM 卡不管微信的盲区）</span>
+          </label>
+          <label class="check-item">
+            <input type="checkbox" id="chkKeepalive" />
+            <span><strong>已完成多任务加锁与电池「无限制」保活</strong>（防止夜间锁屏被荣耀/鸿蒙/澎湃杀后台）</span>
+          </label>
+        </div>
+
+        <div id="findingsBox"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-amber" id="btnPoster">📸 一键生成「父母/自己手机防漏接设置备忘图」</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- 第三步：亲情白名单自动免提 & 微信语音配置生成器 -->
+    <section class="card">
+      <h2>
+        <span>3️⃣ 亲情白名单自动免提 + 微信语音联动 + 摇晃挂断 配置包生成器</span>
+        <span class="badge amber" id="tierBadge">当前：免费预览版（可解锁 Pro 多号码完整包）</span>
+      </h2>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>使用场景模板</label>
+          <select id="selScene">
+            <option value="kitchen_driver">🍳 做饭满手油 / 开车骑行免手接听</option>
+            <option value="elder_care">👵 独居/卧床父母防漏接电话（防诈骗外放）</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>亲情白名单手机号（多个用逗号分隔，仅这些号自动免提）</label>
+          <input type="text" id="inpNumbers" value="13800138000, 13900139000" placeholder="如 138xxxx, 139xxxx" />
+        </div>
+        <div class="field">
+          <label>微信自动免提亲情备注名（匹配微信语音来电）</label>
+          <input type="text" id="inpWechatNames" value="爸, 妈, 老婆, 老公" placeholder="如 爸, 妈, 儿子, 女儿" />
+        </div>
+        <div class="field">
+          <label>来电响铃几秒后自动接通并开免提</label>
+          <select id="selDelay">
+            <option value="2">响铃 2 秒立即接通免提</option>
+            <option value="3" selected>响铃 3 秒自动接通免提（推荐）</option>
+            <option value="5">响铃 5 秒自动接通免提</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>接通后强制扬声器免提音量</label>
+          <select id="selVol">
+            <option value="80">80% 音量（室内安静环境）</option>
+            <option value="90" selected>90% 大音量（厨房炒菜/客厅远距推荐）</option>
+            <option value="100">100% 最大音量（听力较弱长辈推荐）</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>通话中免触屏挂断方式（解决通话中语音闭麦死穴）</label>
+          <select id="selHangup">
+            <option value="shake" selected>👋 晃动手机 2 下（或手肘轻碰桌面）自动挂断</option>
+            <option value="flip">🔄 翻转手机屏幕朝下放置 1 秒自动挂断</option>
+            <option value="proximity">✋ 手掌隔空遮挡手机顶部传感器 2 秒挂断</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>非白名单陌生号码（外卖/推销/诈骗）来电策略</label>
+          <select id="selStranger">
+            <option value="normal_ring" selected>🔔 保持正常响铃，绝不自动接通外放（日常推荐）</option>
+            <option value="mute_ring">🔕 陌生号码自动静音，仅家人响铃并自动免提</option>
+            <option value="reject">🛡️ 陌生号码直接拒接防诈骗（高龄独居老人专护）</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnPreviewChecklist">📋 预览本机保姆级设置清单</button>
+        <button class="btn btn-outline" id="btnPreviewMacro">⚙️ 预览 MacroDroid 自动免提宏 (.macro)</button>
+        <button class="btn btn-outline" id="btnPreviewTasker">🧩 预览 Tasker 自动化工程 (.prj.xml)</button>
+        <button class="btn btn-outline" id="btnPreviewAdb">💻 预览 ADB 免杀后台一键保活脚本 (.sh/.bat)</button>
+      </div>
+
+      <pre class="code-preview" id="codePreview"></pre>
+
+      <div class="btn-row" style="margin-top:14px;">
+        <button class="btn btn-primary" id="btnDownloadMacro">⬇️ 导出 MacroDroid 专属配置文件 (.macro)</button>
+        <button class="btn btn-outline" id="btnDownloadTasker">⬇️ 导出 Tasker 工程文件 (.prj.xml)</button>
+        <button class="btn btn-outline" id="btnDownloadAdb">⬇️ 导出电脑 ADB 一键授权保活脚本</button>
+        <a class="btn btn-amber" href="./downloads/call-guard-kit.zip" download>📦 下载通用全套懒人包 (call-guard-kit.zip)</a>
+      </div>
+
+      <div class="pro-bar">
+        <span style="font-size:13.5px; font-weight:700; color:#fcd34d;">🔑 Pro 终身版解锁（多亲情号白名单 + 微信语音自动免提 + 传感器挂断全量导出）：</span>
+        <input type="text" id="inpLicense" placeholder="输入 OPC1. 开头的终身激活码（纯本地 Ed25519 离线验签）" />
+        <button class="btn btn-amber" id="btnVerifyLicense">立即解锁 Pro</button>
+        <span id="licenseMsg" style="font-size:12.5px; color:var(--muted);">支持单号码免费导出体验；输入激活码解锁最多 20 个亲情号与微信联动。</span>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import {
+      BRAND_GUIDES,
+      auditPhoneSetup,
+      generateCallGuardBundle,
+      verifyLicenseOffline,
+    } from "./callguard-core.js";
+
+    let currentBrand = "honor";
+    let currentPreviewTab = "checklist";
+    let isProUnlocked = localStorage.getItem("callguard_pro_unlocked") === "1";
+
+    const brandBadge = document.getElementById("brandBadge");
+    const guidePath = document.getElementById("guidePath");
+    const guideCmdAnswer = document.getElementById("guideCmdAnswer");
+    const guideCmdReject = document.getElementById("guideCmdReject");
+    const guideHangupLimit = document.getElementById("guideHangupLimit");
+    const guideHangupSolutions = document.getElementById("guideHangupSolutions");
+
+    function renderBrandGuide() {
+      const g = BRAND_GUIDES[currentBrand] || BRAND_GUIDES.honor;
+      brandBadge.textContent = `${g.shortName} · ${g.badge}`;
+      guidePath.textContent = g.voiceAnswerPath;
+      guideCmdAnswer.textContent = `✅ 接听并开免提：${g.voiceCommands.answer}`;
+      guideCmdReject.textContent = `❌ 拒接来电：${g.voiceCommands.reject}`;
+      guideHangupLimit.textContent = g.inCallHangupLimit;
+      guideHangupSolutions.innerHTML = g.inCallHangupSolutions
+        .map((s) => `<li style="margin-bottom:4px;">${s}</li>`)
+        .join("");
+    }
+
+    function renderAudit() {
+      const res = auditPhoneSetup({
+        brand: currentBrand,
+        scene: document.getElementById("selScene").value,
+        systemAutoAnswerAll: true,
+        hasWhitelistFilter: document.getElementById("chkWhitelist").checked,
+        hasInCallHangupFallback: document.getElementById("chkHangup").checked,
+        hasWechatVoiceAutoSpeaker: document.getElementById("chkWechat").checked,
+        hasBackgroundKeepalive: document.getElementById("chkKeepalive").checked,
+      });
+
+      const circle = document.getElementById("scoreCircle");
+      circle.textContent = `${res.score}`;
+      circle.className = res.score >= 80 ? "score-circle safe" : "score-circle";
+      document.getElementById("scoreStatus").textContent = `[${res.grade}级] ${res.statusText}`;
+
+      const box = document.getElementById("findingsBox");
+      if (res.findings.length === 0) {
+        box.innerHTML = `<div class="step-box" style="margin-bottom:0;"><div class="step-label">满分通过</div><div style="font-size:13px;">你的 ${res.brandGuide.shortName} 已完成亲情白名单自动免提、通话免触挂断与微信语音联动！</div></div>`;
+      } else {
+        box.innerHTML = res.findings
+          .map(
+            (f) =>
+              `<div class="finding-item"><strong>⚠️ ${f.title}</strong><div>${f.detail}</div><div style="color:#6ee7b7; margin-top:4px;">💡 修复：${f.fix}</div></div>`
+          )
+          .join("");
+      }
+    }
+
+    function getCurrentBundle() {
+      const rawNumbers = document.getElementById("inpNumbers").value;
+      const list = rawNumbers.split(/[,，\s]+/).filter(Boolean);
+      const effectiveNumbers = isProUnlocked ? list : list.slice(0, 1);
+
+      return generateCallGuardBundle({
+        brand: currentBrand,
+        scene: document.getElementById("selScene").value,
+        whitelistNumbers: effectiveNumbers,
+        wechatNames: document.getElementById("inpWechatNames").value,
+        delaySeconds: Number(document.getElementById("selDelay").value),
+        speakerVolumePercent: Number(document.getElementById("selVol").value),
+        hangupGesture: document.getElementById("selHangup").value,
+        strangerPolicy: document.getElementById("selStranger").value,
+      });
+    }
+
+    function renderPreview() {
+      const b = getCurrentBundle();
+      const pre = document.getElementById("codePreview");
+      if (currentPreviewTab === "macro") {
+        pre.textContent = b.macrodroidJson;
+      } else if (currentPreviewTab === "tasker") {
+        pre.textContent = b.taskerXml;
+      } else if (currentPreviewTab === "adb") {
+        pre.textContent = b.adbKeepaliveSh;
+      } else {
+        pre.textContent = b.checklistMarkdown;
+      }
+    }
+
+    function updateProUI() {
+      const badge = document.getElementById("tierBadge");
+      const msg = document.getElementById("licenseMsg");
+      if (isProUnlocked) {
+        badge.textContent = "✅ 已解锁 Pro 终身版（无限亲情白名单 + 微信语音自动免提）";
+        badge.className = "badge";
+        msg.textContent = "Pro 终身授权已激活（纯本地 Ed25519 验签通过）。";
+        msg.style.color = "#6ee7b7";
+      }
+    }
+
+    function downloadTextFile(filename, content, mime = "text/plain;charset=utf-8") {
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("brandTabs").addEventListener("click", (e) => {
+      const btn = e.target.closest(".brand-tab");
+      if (!btn) return;
+      document.querySelectorAll(".brand-tab").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentBrand = btn.dataset.brand;
+      renderBrandGuide();
+      renderAudit();
+      renderPreview();
+    });
+
+    ["chkWhitelist", "chkHangup", "chkWechat", "chkKeepalive"].forEach((id) => {
+      document.getElementById(id).addEventListener("change", renderAudit);
+    });
+
+    ["selScene", "inpNumbers", "inpWechatNames", "selDelay", "selVol", "selHangup", "selStranger"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => {
+        renderAudit();
+        renderPreview();
+      });
+    });
+
+    document.getElementById("btnPreviewChecklist").addEventListener("click", () => {
+      currentPreviewTab = "checklist";
+      renderPreview();
+    });
+    document.getElementById("btnPreviewMacro").addEventListener("click", () => {
+      currentPreviewTab = "macro";
+      renderPreview();
+    });
+    document.getElementById("btnPreviewTasker").addEventListener("click", () => {
+      currentPreviewTab = "tasker";
+      renderPreview();
+    });
+    document.getElementById("btnPreviewAdb").addEventListener("click", () => {
+      currentPreviewTab = "adb";
+      renderPreview();
+    });
+
+    document.getElementById("btnDownloadMacro").addEventListener("click", () => {
+      const b = getCurrentBundle();
+      downloadTextFile(`CallGuard-${b.brand}-whitelist-speaker.macro`, b.macrodroidJson, "application/json;charset=utf-8");
+    });
+
+    document.getElementById("btnDownloadTasker").addEventListener("click", () => {
+      const b = getCurrentBundle();
+      downloadTextFile(`CallGuard-${b.brand}.prj.xml`, b.taskerXml, "application/xml;charset=utf-8");
+    });
+
+    document.getElementById("btnDownloadAdb").addEventListener("click", () => {
+      const b = getCurrentBundle();
+      downloadTextFile(`CallGuard-${b.brand}-keepalive.sh`, b.adbKeepaliveSh);
+    });
+
+    document.getElementById("btnVerifyLicense").addEventListener("click", async () => {
+      const token = document.getElementById("inpLicense").value.trim();
+      const res = await verifyLicenseOffline(token, "call-guard");
+      const msg = document.getElementById("licenseMsg");
+      if (res.valid) {
+        isProUnlocked = true;
+        localStorage.setItem("callguard_pro_unlocked", "1");
+        updateProUI();
+        renderPreview();
+      } else {
+        msg.textContent = `激活码无效 (${res.reason})，请核对是否完整复制了 OPC1. 开头的激活码。`;
+        msg.style.color = "#fda4af";
+      }
+    });
+
+    // Generate shareable setup poster PNG
+    document.getElementById("btnPoster").addEventListener("click", () => {
+      const b = getCurrentBundle();
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1440;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#0b1120";
+      ctx.fillRect(0, 0, 1080, 1440);
+
+      ctx.fillStyle = "#10b981";
+      ctx.fillRect(60, 60, 960, 12);
+
+      ctx.fillStyle = "#6ee7b7";
+      ctx.font = "bold 28px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText(`免手接 CallGuard · 手机声控免提与白名单设置卡`, 60, 130);
+
+      ctx.fillStyle = "#f8fafc";
+      ctx.font = "bold 46px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText(b.brandGuide.name, 60, 205);
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(60, 250, 960, 260);
+      ctx.fillStyle = "#38bdf8";
+      ctx.font = "bold 28px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText("① 开启系统隐藏「动嘴接电话 + 自动免提」路径：", 90, 305);
+      ctx.fillStyle = "#f8fafc";
+      ctx.font = "26px -apple-system, PingFang SC, sans-serif";
+      const lines = b.brandGuide.voiceAnswerPath.split("\n");
+      lines.forEach((l, i) => ctx.fillText(l.slice(0, 36), 90, 355 + i * 44));
+      if (lines[0] && lines[0].length > 36) {
+        ctx.fillText(lines[0].slice(36), 90, 399);
+      }
+      ctx.fillStyle = "#a7f3d0";
+      ctx.fillText(`来电口令：直接喊“接听电话”自动免提 | 喊“挂断电话”拒接`, 90, 470);
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(60, 540, 960, 320);
+      ctx.fillStyle = "#fcd34d";
+      ctx.font = "bold 28px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText("② 为什么通话中喊“挂断电话”没反应？（必配盲挂兜底）", 90, 595);
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = "25px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText("电话接通后麦克风被通话独占，语音助手强制闭麦防聊天误挂。", 90, 650);
+      ctx.fillStyle = "#6ee7b7";
+      ctx.fillText("解法 A：电话设置 -> 高级 -> 开启【按电源键结束通话】手背盲按秒挂", 90, 710);
+      ctx.fillText("解法 B：导入 CallGuard 规则 -> 通话中摇晃或翻转手机自动挂断", 90, 765);
+      ctx.fillText("解法 C：启用亲情白名单过滤 -> 防外卖/推销/诈骗电话 3 秒自动外放", 90, 820);
+
+      ctx.fillStyle = "#1e293b";
+      ctx.fillRect(60, 890, 960, 360);
+      ctx.fillStyle = "#10b981";
+      ctx.font = "bold 28px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText("③ 当前已生成亲情白名单免提守护参数：", 90, 945);
+      ctx.fillStyle = "#f8fafc";
+      ctx.font = "26px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText(`• 亲情白名单号码：${b.safeNumbers.join(", ")}`, 90, 1005);
+      ctx.fillText(`• 微信自动免提备注：${b.safeNames.join(" / ")}`, 90, 1060);
+      ctx.fillText(`• 响铃延迟与外放音量：响铃 ${b.delaySec} 秒自动接通 · 扬声器 ${b.volPct}%`, 90, 1115);
+      ctx.fillText(`• 陌生号码防护：非白名单号码绝不自动接听外放`, 90, 1170);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "24px -apple-system, PingFang SC, sans-serif";
+      ctx.fillText("在线生成与配置包下载：https://a3152557994-ship-it.github.io/call-guard/", 60, 1340);
+
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `CallGuard-${b.brand}-设置备忘卡.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    });
+
+    updateProUI();
+    renderBrandGuide();
+    renderAudit();
+    renderPreview();
+  </script>
+</body>
+</html>

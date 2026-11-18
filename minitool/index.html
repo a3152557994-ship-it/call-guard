@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>免手接 · 手机声控免提与亲情白名单设置助手</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 16px 14px 40px;
+      line-height: 1.55;
+    }
+    .header {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .tag {
+      display: inline-block;
+      background: #065f46;
+      color: #6ee7b7;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 99px;
+      margin-bottom: 6px;
+    }
+    h1 { font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+    .sub { font-size: 12.5px; color: #94a3b8; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .tab {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 7px 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+    .tab.active {
+      background: #10b981;
+      color: #052e16;
+      border-color: #10b981;
+      font-weight: 800;
+    }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .card h2 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: #38bdf8; }
+    .code {
+      background: #090d16;
+      color: #7dd3fc;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      margin: 6px 0;
+      word-break: break-all;
+    }
+    .warn {
+      background: rgba(245, 158, 11, 0.14);
+      border-left: 3px solid #f59e0b;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 12.5px;
+      color: #fde68a;
+      margin-top: 8px;
+    }
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+      font-size: 13px;
+    }
+    .check-row:last-child { border-bottom: none; }
+    .score {
+      font-size: 24px;
+      font-weight: 900;
+      color: #10b981;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="tag">全机型声控免提 & 防漏接速查</span>
+    <h1>手机动嘴接电话 & 自动免提设置助手</h1>
+    <p class="sub">解决手湿/做饭/开车/独居老人接不到电话，以及系统自动接听不分人、通话中无法语音挂断三大痛点。</p>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-id="honor">荣耀 MagicOS</button>
+    <button class="tab" data-id="huawei">华为鸿蒙</button>
+    <button class="tab" data-id="xiaomi">小米澎湃</button>
+    <button class="tab" data-id="oppo">OPPO</button>
+    <button class="tab" data-id="vivo">vivo</button>
+    <button class="tab" data-id="iphone">iPhone</button>
+  </div>
+
+  <div class="card">
+    <h2 id="brandTitle">荣耀 Magic6 / MagicOS 声控免提开关</h2>
+    <div style="font-size:12.5px; color:#cbd5e1;">1. 开启来电语音控制路径：</div>
+    <div class="code" id="brandPath"></div>
+    <div style="font-size:12.5px; color:#a7f3d0; margin-top:6px;" id="brandCmd"></div>
+    <div class="warn" id="brandFix"></div>
+  </div>
+
+  <div class="card">
+    <h2>防外卖/诈骗自动外放 & 防漏接自检清单</h2>
+    <div class="score" id="scoreText">当前安全分：25 / 100</div>
+    <label class="check-row">
+      <input type="checkbox" class="chk" value="25" checked />
+      <span>已开启系统隐藏的「来电语音控制」或「扬声器免提路由」</span>
+    </label>
+    <label class="check-row">
+      <input type="checkbox" class="chk" value="30" />
+      <span>已设置「仅家人白名单号码」自动接听（防外卖/推销/诈骗电话3秒自动外放）</span>
+    </label>
+    <label class="check-row">
+      <input type="checkbox" class="chk" value="25" />
+      <span>已开启「按电源键结束通话」或摇晃挂断（解决通话中麦克风独占无法语音挂断）</span>
+    </label>
+    <label class="check-row">
+      <input type="checkbox" class="chk" value="20" />
+      <span>已开启「微信亲情语音自动免提」与后台省电无限制加锁</span>
+    </label>
+  </div>
+
+  <script>
+    (function () {
+      var DATA = {
+        honor: {
+          title: "荣耀 Magic6 至尊版 / MagicOS 声控开关",
+          path: "设置 → 荣耀AI & YOYO → YOYO助理（或智慧语音） → 通话场景设置 → 开启「来电/去电语音控制」",
+          cmd: "来电不用喊唤醒词，直接说“接听电话”自动接通并开免提；说“挂断电话”拒接。",
+          fix: "为什么通话中喊挂断没反应？因为接通后麦克风被通话独占，YOYO自动闭麦。解法：进【电话 → 右上角设置 → 高级 → 开启按电源键结束通话】，手背轻按电源键秒挂！"
+        },
+        huawei: {
+          title: "华为 Mate / Pura (鸿蒙 HarmonyOS) 声控开关",
+          path: "设置 → 智慧助手 → 智慧语音 → 通话场景设置 → 开启「来电语音控制」",
+          cmd: "来电直接说“接听电话”（自动开免提）或“挂断电话”。",
+          fix: "通话中免触挂断解法：进【电话 → 右上角设置 → 高级 → 开启按电源键结束通话】。"
+        },
+        xiaomi: {
+          title: "小米 / 红米 (澎湃 HyperOS) 声控开关",
+          path: "设置 → 小爱同学 → 小爱通话（或语音控制） → 开启「来电语音控制」",
+          cmd: "来电直接喊“接听电话”自动接通并外放；喊“挂断电话”拒接。",
+          fix: "避坑提醒：切勿直接开系统一刀切「自动接听」，否则外卖和推销电话也会3秒自动外放，务必配合白名单过滤。"
+        },
+        oppo: {
+          title: "OPPO / 一加 / 真我 (ColorOS) 声控开关",
+          path: "设置 → 小布助手（Breeno） → 语音 → 开启「来电语音控制」",
+          cmd: "来电直接喊“接听电话”或“挂断电话”。",
+          fix: "通话中盲挂设置：进【设置 → 其他设置 → 无障碍 → 开启按电源键结束通话】。"
+        },
+        vivo: {
+          title: "vivo / iQOO (OriginOS) 声控开关",
+          path: "设置 → 蓝心小V（或Jovi语音） → 语音唤醒与控制 → 开启「来电语音控制」",
+          cmd: "来电直接喊“接听电话”自动免提接通。",
+          fix: "通话中盲挂设置：进【设置 → 快捷与辅助 → 无障碍 → 开启按电源键结束通话】。"
+        },
+        iphone: {
+          title: "苹果 iPhone (iOS 17 / iOS 18) 声控免提组合拳",
+          path: "① 默认免提：设置 → 辅助功能 → 触控 → 音频通话方式 → 选「扬声器」\n② 动嘴接/挂：设置 → 辅助功能 → 语音控制 → 开启",
+          cmd: "来电直接说“轻点接听”，通话完直接说“轻点结束通话”即可动嘴挂断！",
+          fix: "白名单防社死技巧：用【设置 → 专注模式】设置仅允许家人联系人来电，再开【自动接听通话】，防止陌生推销电话自动接通外放。"
+        }
+      };
+
+      function render(id) {
+        var item = DATA[id] || DATA.honor;
+        document.getElementById("brandTitle").textContent = item.title;
+        document.getElementById("brandPath").textContent = item.path;
+        document.getElementById("brandCmd").textContent = item.cmd;
+        document.getElementById("brandFix").textContent = item.fix;
+      }
+
+      var tabs = document.getElementById("tabs");
+      tabs.addEventListener("click", function (e) {
+        var target = e.target;
+        if (!target || !target.getAttribute("data-id")) return;
+        var btns = tabs.querySelectorAll(".tab");
+        for (var i = 0; i < btns.length; i++) {
+          btns[i].className = "tab";
+        }
+        target.className = "tab active";
+        render(target.getAttribute("data-id"));
+      });
+
+      var chks = document.querySelectorAll(".chk");
+      function updateScore() {
+        var total = 0;
+        for (var i = 0; i < chks.length; i++) {
+          if (chks[i].checked) total += parseInt(chks[i].value, 10);
+        }
+        var el = document.getElementById("scoreText");
+        el.textContent = "当前免手接防护分：" + total + " / 100";
+        el.style.color = total >= 80 ? "#10b981" : "#f59e0b";
+      }
+      for (var j = 0; j < chks.length; j++) {
+        chks[j].addEventListener("change", updateScore);
+      }
+
+      render("honor");
+      updateScore();
+    })();
+  </script>
+</body>
+</html>

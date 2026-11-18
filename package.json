@@ -1,0 +1,20 @@
+{
+  "name": "call-guard",
+  "version": "1.0.0",
+  "description": "免手接 (CallGuard) · 手机声控免提接听、亲情白名单防诈自动外放与通话免触挂断配置台",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/callguard.test.mjs",
+    "build": "node scripts/build-release.mjs"
+  },
+  "keywords": [
+    "call-guard",
+    "hands-free-call",
+    "honor-magicos",
+    "elder-care-whitelist",
+    "macrodroid",
+    "tasker"
+  ],
+  "author": "OPC Studio",
+  "license": "MIT"
+}

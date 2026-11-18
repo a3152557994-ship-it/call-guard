@@ -1,0 +1,4 @@
+node_modules/
+.DS_Store
+PRIVATE_LICENSE_STOCK_DO_NOT_COMMIT.md
+*.log
